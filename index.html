@@ -13,6 +13,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 
     <!-- adding a favicon -->
     <link href="favicon.ico" rel="icon" type="image/x-icon">
@@ -50,152 +51,110 @@
 <section id="location" class="container content-section">
    <div class="row">
     <div class="col-lg-10 col-lg-offset-1">
-    <h2>Where I've Been</h2>
+      <h2>My Travel Diary!</h2>
+    <!--potential random fading texts-->
 
     <div id="mapcontainer"></div>
-   
+
        <script>
             var map = new Datamap({
                 element: document.getElementById('mapcontainer'),
+                done: function(datamap) {
+                    datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+                      $('.modal').modal('show');
+                      $('#title').text(""+geography.properties.name);
+                    });
+                },
                 responsive: true,
                 projection: 'mercator',
-                fills:{
-                    'USA': 'lightskyblue',
-                    'CAN': 'lightskyblue',
-                    'IND': 'lightskyblue',
-                    'SGP': 'lightskyblue',
-                    'MYS': '#344152',
-                    'IDN': '#344152',
-                    'JPN': '#344152',
-                    'LKA': '#344152',
-                    'BHS': '#344152',
-                    'THA': '#344152',
-
-                    defaultFill:'lightslategray', 
-                },
-
                 geographyConfig: {
                     highlightBorderColor: '#ffffff',
-                    highlightOnHover: false,
-                    popupOnHover: false,
+                    highlightOnHover: true,
+                    popupOnHover: true,
                     borderColor: '#000',
                     borderOpacity: 0.5,
                 },
-
-                data:{
-                    USA: {fillKey: 'USA'},
-                    CAN: {fillKey: 'CAN'},
-                    IND: {fillKey: 'IND'},
-                    SGP: {fillKey: 'SGP'},
-                    MYS: {fillKey: 'MYS'},
-                    IDN: {fillKey: 'IDN'},
-                    JPN: {fillKey: 'JPN'},
-                    LKA: {fillKey: 'LKA'},
-                    BHS: {fillKey: 'BHS'},
-                    THA: {fillKey: 'THA'},
-                    defaultFill: 'lightslategray',
+                fills: {
+                  defaultFill: '#DFE0DC',
+                  lived: '#3D6772' ,
+                  visited: '#45ADA8',
+                  wouldLikeToGo: '#2E95AC',
                 },
-
-                bubblesConfig:{
-                    // popupOnHover: false,
-                    highlightFillColor: 'steelblue',
-                    highlightBorderColor: 'lightslategray',
-                    highlightBorderWidth: 1,
-                    borderWidth: 1,
-
+                data: {
+                  USA: { fillKey: "visited" },
+                  JPN: { fillKey: "wouldLikeToGo" },
+                  HRV: { fillKey: "wouldLikeToGo" },
+                  ISR: { fillKey: "wouldLikeToGo" },
+                  PRT: { fillKey: "wouldLikeToGo" },
+                  VNM: { fillKey: "wouldLikeToGo" },
+                  THA: { fillKey: "wouldLikeToGo" },
+                  MEX: { fillKey: "wouldLikeToGo" },
+                  KOR: { fillKey: "wouldLikeToGo" },
+                  FRA: { fillKey: "visited" },
+                  SGP: { fillKey: "visited" },
+                  NLD: { fillKey: "visited" },
+                  GBR: { fillKey: "visited" },
+                  MYS: { fillKey: "visited" },
+                  ARE: { fillKey: "visited" },
+                  CHE: { fillKey: "visited" },
+                  CAN: { fillKey: "visited" },
+                  NZL: { fillKey: "lived" },
+                  IND: { fillKey: "lived" },
                 },
+                geographyConfig: {
+                  dataUrl: null,
+                  hideAntarctica: true,
+                  borderWidth: 1,
+                  borderOpacity: 1,
+                  borderColor: '#FDFDFD',
+                  popupTemplate: function(geography, data) { //this function should just return a string
+                    return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong></div>';
+                  },
+                  popupOnHover: true,
+                  highlightOnHover: true,
+                  highlightFillColor: '#E5FCC2',
+                  highlightBorderColor: '#171b21',
+                  highlightBorderWidth: 1,
+                  highlightBorderOpacity: 1
+              },
             });
 
-            map.arc([{
-                origin: {
-                    latitude: 28.6,
-                    longitude: 77.2,
-                },
-                destination: {
-                    latitude: 1.3,
-                    longitude: 103.8,
-                }
-            },
-            {
-                origin: {
-                    latitude: 1.3,
-                    longitude: 103.8,
-                },
-                destination: {
-                    latitude: 43.7,
-                    longitude: -79.4,
-                }
-            },
-            {
-                origin: {
-                    latitude: 43.7,
-                    longitude: -79.4,
-                },
-                destination: {
-                    latitude: 40.8,
-                    longitude: -73.9,
-                }
-            },
-            {
-                origin: {
-                    latitude: 40.8,
-                    longitude: -73.9,
-                },
-                destination: {
-                    latitude: 43.7,
-                    longitude: -79.4,
-                }
-            }
-            ], {strokeWidth: 1});
-        
-            var livedin = [{
-                name: 'Singapore',
-                country: 'Singapore',
-                radius: 4,
-                latitude: 1.3,
-                longitude: 103.8,
-            },{
-                name: 'New York/New Jersey',
-                country: 'USA',
-                radius: 8,
-                latitude: 40.8,
-                longitude: -73.9,
-            },{
-                name: 'Toronto',
-                country: 'Canada',
-                radius: 8,
-                latitude: 43.7,
-                longitude: -79.4,
-            },{
-                name: 'Delhi',
-                country: 'India',
-                radius: 8,
-                latitude: 28.6,
-                longitude: 77.2,
-            },
-        ];
-        var img=document.getElementById("doge");
-        
-        map.bubbles(livedin, {
-            popupTemplate: function(geo, data){
-                return'<div class="hoverinfo"><strong>',
-                "<br/>" + data.name + ", " + data.country + "</strong></div>";
-            },
-        });
+            window.addEventListener('resize', function(){
+                map.resize(0.3);
+            });
 
-        window.addEventListener('resize', function(){
-            map.resize(0.3);
+        map.legend({
+          legendTitle : "Legend",
+          defaultFillName: "Other Countries",
+          labels: {
+            a: "visited",
+            b: "lived",
+            c: "wouldLikeToGo",
+          }
         });
 
         </script>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container text-center">
-            <p>&copy; Nagma Kapoor 2016</p>
+        <div class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 id=title class="modal-title">Name of Country</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Describe what was done in country/what you would like to do</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
-    </footer>
+
+    </section>
 
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
